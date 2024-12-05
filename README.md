@@ -21,3 +21,22 @@ This tutorial demonstrates how to create a Telegram bot interceptor to capture a
 The interceptor script listens for messages sent to the bot and logs them to the console.
 
 ```python
+from telegram.ext import Application, MessageHandler, filters
+
+# Replace with your bot token
+BOT_TOKEN = "YOUR_BOT_TOKEN"
+
+async def log_messages(update, context):
+    user = update.effective_user
+    message = update.message.text
+    print(f"Intercepted message from {user.username or user.id}: {message}")
+
+async def main():
+    app = Application.builder().token(BOT_TOKEN).build()
+    app.add_handler(MessageHandler(filters.TEXT, log_messages))
+    print("Interceptor bot is running...")
+    await app.run_polling()
+
+if __name__ == "__main__":
+    import asyncio
+    asyncio.run(main())
